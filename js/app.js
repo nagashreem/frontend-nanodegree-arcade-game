@@ -30,14 +30,14 @@ class Player{
     }
     update(){
         this.position = [(this.x/this.step[0]),(this.y/this.step[1])];
-        //console.log(`player position: ${this.position}`);
         checkForCollision();
         checkForWin();
     }
     render(){
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+
         if (this.win){
-            console.log(this.win);
+
             ctx.font = "36pt Impact";
             ctx.textAlign = "center";
             ctx.fillStyle = "white";
@@ -56,27 +56,23 @@ class Player{
         }
     }
 
-    handleInput(keypress){
-        switch(keypress){
+    handleInput(keyInput){
+        switch(keyInput){
 
             case 'left':
                 this.move = ((this.x===0)?[0,0]:[-1,0]);
-                //console.log(`${keypress}: x=${this.x},y=${this.y}`);
                 break;
        
             case 'up':
                 this.move = ((this.y===0)?[0,0]:[0,-1]);
-                //console.log(`${keypress}: x=${this.x},y=${this.y}`);
                 break;
         
             case 'right':
                 this.move= ((this.x===this.step[0]*4)?[0,0]:[1,0]);
-                //console.log(`${keypress}: x=${this.x},y=${this.y}`);
                 break;
             
             case 'down':
                 this.move = ((this.y===this.step[1]*5)?[0,0]:[0,1]);
-                //console.log(`${keypress}: x=${this.x},y=${this.y}`);
                 break;
         }
 
@@ -94,18 +90,17 @@ class Player{
     };
 
     function checkForWin(){
-        console.log(`checking for win ${player.position[1]}`);
         if (player.position[1]===0){
             player.win = true;
             for(let enemy of allEnemies){
                 enemy.speed=0;
             }
-            console.log('cplayer position is top row');
         }
     };
 
     function resetPlayer(){
         [player.x,player.y]= [2*player.step[0],5*player.step[1]];
+        player.move = [0,0];
     }
 
 const allEnemies = [new Enemy(100,65),new Enemy(200,145), new Enemy(300,225)];
@@ -114,6 +109,7 @@ const player = new Player();
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
+
     var allowedKeys = {
         37: 'left',
         38: 'up',
