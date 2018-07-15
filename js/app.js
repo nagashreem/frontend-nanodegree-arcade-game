@@ -1,43 +1,55 @@
-// Enemies our player must avoid
-class Enemy{
-    constructor(x=10, y=60){
-            this.sprite = 'images/enemy-bug.png';
+
+class Character{
+    constructor(x=0, y=0, sprite){
+            this.sprite = sprite;
             this.x = x;
             this.y = y;
             this.step = [100,80];
-            this.speed = 50;
+            this.position = [];
         }
-    update(dt){
-        this.x= (this.x>400)? 0: (this.x+(this.speed*dt));
+    update(){
         this.position = [Math.round(this.x/this.step[0]),Math.round(this.y/this.step[1])];
     }
     render(){
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
-};
+}
 
+class Enemy extends Character{
+    constructor(x,y,sprite){
+        super(x,y,sprite='images/enemy-bug.png');
+        this.speed = 50;
+    }
 
+    update(dt){
+        super.update();
+        this.x= (this.x>400)? 0: (this.x+(this.speed*dt));
+    }
 
-class Player{
-    constructor(x=200, y=400){
-        this.sprite = 'images/char-princess-girl.png';
-        this.x= x;
-        this.y= y;
-        this.step = [100,80];
+    render(){
+        super.render();
+
+    }
+
+}
+
+class Player extends Character{
+    constructor(x=200,y=400,sprite ='images/char-princess-girl.png' ){
+        super(x,y,sprite);
         this.move = [0,0];
         this.win = false;
     }
+
     update(){
-        this.position = [(this.x/this.step[0]),(this.y/this.step[1])];
-        checkForCollision();
-        checkForWin();
+        super.update();
+        this.checkForCollision();
+        this.checkForWin();
     }
+
     render(){
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-
+        super.render();
         if (this.win){
-
             ctx.font = "36pt Impact";
             ctx.textAlign = "center";
             ctx.fillStyle = "white";
@@ -79,29 +91,29 @@ class Player{
         this.x+= this.step[0]*this.move[0];
         this.y+= this.step[1]*this.move[1];
     }
-};
 
-    function checkForCollision(){
+    checkForCollision(){
         for(let enemy of allEnemies) {
-            if((player.position[0]===enemy.position[0]) && (player.position[1]===enemy.position[1])){
-                resetPlayer();
+            if((this.position[0]===enemy.position[0]) && (this.position[1]===enemy.position[1])){
+                this.resetPlayer();
             }
         }
-    };
-
-    function checkForWin(){
-        if (player.position[1]===0){
-            player.win = true;
+    }
+    
+    checkForWin(){
+        if (this.position[1]===0){
+            this.win = true;
             for(let enemy of allEnemies){
                 enemy.speed=0;
             }
         }
     };
 
-    function resetPlayer(){
-        [player.x,player.y]= [2*player.step[0],5*player.step[1]];
-        player.move = [0,0];
+    resetPlayer(){
+        [this.x,this.y]= [2*this.step[0],5*this.step[1]];
+        this.move = [0,0];
     }
+};
 
 const allEnemies = [new Enemy(100,65),new Enemy(200,145), new Enemy(300,225)];
 const player = new Player();
@@ -121,7 +133,7 @@ document.addEventListener('keyup', function(e) {
 
 document.addEventListener('keypress', function(e) {
     if(e.keyCode ===13){
-        resetPlayer();
+        player.resetPlayer();
         player.win = false;
         for (let enemy of allEnemies){
             enemy.speed=50;
