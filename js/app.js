@@ -9,6 +9,15 @@ const maxY = 5;
 const pixelsPerX = 100;
 const pixelsPerY= 80;
 
+/** 
+* @description Player and Enemy objects that would be later instantiated
+* using respective Constructors
+* @variable
+* @type {object}
+*/
+let player;
+let allEnemies;
+
 /** @description True if the Player has won
     @variable
     @type {number}
@@ -48,12 +57,15 @@ class Enemy{
 
 /**
 * @description Draws the Enemy object on the canvas
+* ctx is the 2D context for the canvas element created in engine.js and assigned to the global variable
+* so that it can be used from within this file
+* Image files are cached and loaded from resource.js
 * @param none
 */
     render(){
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
-};
+}
 
 /**
  * @description Creates a new Player
@@ -85,6 +97,9 @@ class Player {
 
 /**
 * @description Draws the Player object on the canvas
+* ctx is the 2D context for the canvas element created in engine.js and assigned to the global variable
+* so that it can be used from within this file
+* Image files are cached and loaded from resource.js
 * @param none
 */
     render(){
@@ -123,7 +138,7 @@ class Player {
                 break;
         }
     }
-};
+}
 
 /**
 * @description Checks if the Player object collides with the Enemy object
@@ -140,7 +155,8 @@ function checkForCollision(){
 }
 
 /**
-* @description Renders the 'Winning Message' on the canvas when the Player object wins
+* @description Renders the 'Winning Message' on the canvas when the Player object wins 
+* which is invoked from within engine.js
 * @param none
 */    
 function renderWin(){
@@ -166,7 +182,7 @@ function renderWin(){
 /**
 * @description Checks if the Player object has won
 * Check if the Player has reached the top most row
-* If the Player has won, pause the enemies and render the Win message (invoked from engine.js)
+* If the Player has won, pause the enemies and print the Win message 
 * @param none
 */
 function checkForWin(){
