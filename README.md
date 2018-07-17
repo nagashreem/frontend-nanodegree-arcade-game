@@ -26,8 +26,8 @@ The Project repository includes css, images, and js folders, as well as an index
 #### For Browsers that do not support ES6
 - Install [Node](https://nodejs.org/en/)
 - In the Node.js command prompt, go to the directory containing Project files
-- Run the command <npm install>
-- After npm is successfully installed, run the command <npm run build>
+- Run the command *npm install*
+- After npm is successfully installed, run the command *npm run build*
 - The js files wll be transpiled to ES5 code that will be able to run in every browser
 
 ### How to Play the game
