@@ -20,11 +20,11 @@ let win = false;
  * @constructor
  * @param {number} x coordinate on the canvas for the placement of the object
  * @param {number} y coordinate on the canvas for the placement of the object
- * @param {string} sprite - image(png) to be the object
  * @param {number} speed - speed with which the object should be moved along the canvas
+ * @param {string} sprite - image(png) to be the object
  */
 class Enemy{
-    constructor(x, y, sprite ='images/enemy-bug.png', speed = 50){
+    constructor(x, y, speed = 50, sprite ='images/enemy-bug.png'){
         this.x = x;
         this.y = y;
         this.sprite = sprite;
@@ -92,15 +92,6 @@ class Player {
     }
 
 /**
-* @description Resets the position of the Player
-* @param none
-*/
-    reset(){
-        this.x = 2*pixelsPerX;
-        this.y = 5*pixelsPerY;
-    }
-
-/**
 * @description Moves the Player object on the canvas based on the keyboard input
 * @param {key} Arrow keys 
 * If the Player has reached the end of the screen, do not update the position
@@ -143,7 +134,7 @@ class Player {
 function checkForCollision(){
     for(let enemy of allEnemies) {
         if((enemy.posX===player.posX) && (enemy.posY===player.posY)){
-            player.reset();
+            refreshPlayer();
         }
     }
 }
@@ -187,13 +178,30 @@ function checkForWin(){
     }
 }
 
+/**
+* @description Reset the position of the Player on the canvas
+* by calling the Constructor with defualt parameters
+* @param none
+*/
+function refreshPlayer(){
+    player = new Player();
+}
+
+/**
+* @description Reset the position and speed of the Enemies on the canvas
+* by calling the Constructor for Enemy 
+* Create multiple enemy objects and place them in an array allEnemies
+* @param none
+*/
+function refreshEnemies(){
+    allEnemies = [new Enemy(100,65), new Enemy(200,145,200), new Enemy(300,225,150)];
+}
+
 /** 
 * Instantiate the Player and Enemy objects
-* Create multiple enemy objects and place them in an array allEnemies
 */
-const player = new Player();
-const allEnemies = [new Enemy(100,65), new Enemy(200,145), new Enemy(300,225)];
-
+refreshPlayer();
+refreshEnemies();
 
 /**
 * Listen for key presses and send the keys to the
@@ -216,10 +224,8 @@ document.addEventListener('keyup', function(e) {
 */
 document.addEventListener('keypress', function(e) {
     if(e.keyCode===13){
-        player.reset();
-        for(let enemy of allEnemies){
-            enemy.speed = 50;
-        } 
+        refreshPlayer();
+        refreshEnemies();
         win = false;       
     }
 });
